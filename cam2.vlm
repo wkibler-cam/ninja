@@ -1,0 +1,30 @@
+# Background options
+new   bg broadcast enabled
+# bg just plain black background png image
+setup bg input     "C:\Users\Public\Documents\ODB.png"
+setup bg option image-duration=-1
+setup bg output #transcode{sfilter=mosaic{width=960,height=480,cols=2,rows=2,position=1,order="0,1,2,3",keep-aspect-ratio=enabled,keep-picture=1,mosaic-align=5},vcodec=mp4v,vb=2000,fps=15}:duplicate{dst=display}
+
+# Input options
+new   1 broadcast enabled
+# RTSP string for SPECO cameras
+setup 1 input "rtsp://viewer:1112@10.0.78.11:554/trackID=1"
+setup 1 option dshow-size="640x480"
+setup 1 output #duplicate{dst=mosaic-bridge{id=1,width=480,height=240},select=video,dst=bridge-out{id=0}}
+
+new   2 broadcast enabled
+setup 2 input "rtsp://viewer:1112@10.0.78.11:554/trackID=2"
+setup 2 option dshow-size="640x480"
+setup 2 output #duplicate{dst=mosaic-bridge{id=2,width=480,height=240},select=video,dst=bridge-out{id=1}}
+
+new   3 broadcast enabled
+setup 3 input "rtsp://viewer:1112@10.0.78.11:554/trackID=3"
+setup 3 option dshow-size="640x480"
+setup 3 output #duplicate{dst=mosaic-bridge{id=3,width=480,height=240},select=video,dst=bridge-out{id=2}}
+
+
+# Launch everything
+control bg play
+control 1 play
+control 2 play
+control 3 play
